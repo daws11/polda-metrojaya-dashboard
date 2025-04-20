@@ -1,103 +1,129 @@
-import Image from "next/image";
+"use client";
+import { DashboardLayout } from "@/components/dashboard-layout";
+import { TableauEmbed } from "@/components/tableau-embed";
+import { TabsContent } from "@/components/ui/tabs";
+import { Footer } from "@/components/footer"; 
+import { ResponsiveAlert } from "@/components/responsive-alert";
+import { SmallScreenIndicator } from "@/components/small-screen-indicator";
 
-export default function Home() {
+// Interface untuk data Tableau
+interface TableauData {
+  id: string;
+  title: string;
+  embedCode: string;
+}
+
+// Interface untuk koleksi data Tableau
+interface TableauEmbeds {
+  overview: TableauData;
+  map: TableauData;
+  pie: TableauData;
+  bar: TableauData;
+  line: TableauData;
+}
+
+export default function DashboardPage() {
+  
+  // Embed codes dari Tableau
+  const tableauEmbeds: TableauEmbeds = {
+    overview: {
+      id: 'viz1745162148015',
+      title: 'Dashboard Overview',
+      embedCode: `<noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Po&#47;PoldaMetroJaya2023CrimeDashboard&#47;PoldaMetroJaya2023CrimeDashboard&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='PoldaMetroJaya2023CrimeDashboard&#47;PoldaMetroJaya2023CrimeDashboard' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Po&#47;PoldaMetroJaya2023CrimeDashboard&#47;PoldaMetroJaya2023CrimeDashboard&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1745162148015');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>`
+    },
+    map: {
+      id: 'viz1745162240560',
+      title: 'Peta Sebaran Kriminal',
+      embedCode: `<noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Po&#47;PoldaMetroJaya2023CrimeDashboard&#47;MapChart&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='PoldaMetroJaya2023CrimeDashboard&#47;MapChart' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Po&#47;PoldaMetroJaya2023CrimeDashboard&#47;MapChart&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1745162240560');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>`
+    },
+    pie: {
+      id: 'viz1745162282034',
+      title: 'Distribusi Kriminal (Pie Chart)',
+      embedCode: `<noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Po&#47;PoldaMetroJaya2023CrimeDashboard&#47;PieChart&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='PoldaMetroJaya2023CrimeDashboard&#47;PieChart' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Po&#47;PoldaMetroJaya2023CrimeDashboard&#47;PieChart&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1745162282034');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>`
+    },
+    bar: {
+      id: 'viz1745162309719',
+      title: 'Perbandingan Kriminal (Bar Chart)',
+      embedCode: `<noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Po&#47;PoldaMetroJaya2023CrimeDashboard&#47;BarChart&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='PoldaMetroJaya2023CrimeDashboard&#47;BarChart' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Po&#47;PoldaMetroJaya2023CrimeDashboard&#47;BarChart&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1745162309719');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>`
+    },
+    line: {
+      id: 'viz1745162344145',
+      title: 'Tren Kriminal (Line Chart)',
+      embedCode: `<noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Po&#47;PoldaMetroJaya2023CrimeDashboard&#47;LineChart&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='PoldaMetroJaya2023CrimeDashboard&#47;LineChart' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Po&#47;PoldaMetroJaya2023CrimeDashboard&#47;LineChart&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1745162344145');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>`
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <>
+      <ResponsiveAlert />
+      <SmallScreenIndicator />
+      <DashboardLayout>
+        <TabsContent value="overview" className="mt-6">
+          <TableauEmbed 
+            id={tableauEmbeds.overview.id} 
+            embedCode={tableauEmbeds.overview.embedCode} 
+            title={tableauEmbeds.overview.title} 
+          />
+        </TabsContent>
+        
+        <TabsContent value="map" className="mt-6">
+          <TableauEmbed 
+            id={tableauEmbeds.map.id} 
+            embedCode={tableauEmbeds.map.embedCode} 
+            title={tableauEmbeds.map.title} 
+          />
+        </TabsContent>
+        
+        <TabsContent value="pie" className="mt-6">
+          <TableauEmbed 
+            id={tableauEmbeds.pie.id} 
+            embedCode={tableauEmbeds.pie.embedCode} 
+            title={tableauEmbeds.pie.title} 
+          />
+        </TabsContent>
+        
+        <TabsContent value="bar" className="mt-6">
+          <TableauEmbed 
+            id={tableauEmbeds.bar.id} 
+            embedCode={tableauEmbeds.bar.embedCode} 
+            title={tableauEmbeds.bar.title} 
+          />
+        </TabsContent>
+        
+        <TabsContent value="line" className="mt-6">
+          <TableauEmbed 
+            id={tableauEmbeds.line.id} 
+            embedCode={tableauEmbeds.line.embedCode} 
+            title={tableauEmbeds.line.title} 
+          />
+        </TabsContent>
+        
+        <TabsContent value="all" className="mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <TableauEmbed 
+              id={`${tableauEmbeds.map.id}-all`} 
+              embedCode={tableauEmbeds.map.embedCode} 
+              title={tableauEmbeds.map.title} 
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <TableauEmbed 
+              id={`${tableauEmbeds.pie.id}-all`} 
+              embedCode={tableauEmbeds.pie.embedCode} 
+              title={tableauEmbeds.pie.title} 
+            />
+            <TableauEmbed 
+              id={`${tableauEmbeds.bar.id}-all`} 
+              embedCode={tableauEmbeds.bar.embedCode} 
+              title={tableauEmbeds.bar.title} 
+            />
+            <TableauEmbed 
+              id={`${tableauEmbeds.line.id}-all`} 
+              embedCode={tableauEmbeds.line.embedCode} 
+              title={tableauEmbeds.line.title} 
+            />
+          </div>
+        </TabsContent>
+      </DashboardLayout>
+      <Footer />
+    </>
   );
 }
